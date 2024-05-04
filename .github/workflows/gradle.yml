@@ -53,8 +53,8 @@ jobs:
           files: "plugin/build/libs/*.jar"
           body: |
             Commit ${{ steps.short_sha.outputs.sha_short }}
-            This release is automatically compiled by GitHub Actions
-          name: Adyeshach Automation Compile ${{ steps.short_sha.outputs.sha_short }}
+            自动构建、关闭无用模块、开启龙核模块
+          name: Adyeshach 自动构建 ${{ steps.short_sha.outputs.sha_short }}
           draft: false
           tag_name: commit-${{ steps.short_sha.outputs.sha_short }}
           generate_release_notes: true
