@@ -23,6 +23,7 @@ subprojects {
         mavenCentral()
     }
     dependencies {
+        compileOnly(fileTree("libs"))
         compileOnly(kotlin("stdlib"))
         // server
         compileOnly("ink.ptms.core:v11604:11604")
