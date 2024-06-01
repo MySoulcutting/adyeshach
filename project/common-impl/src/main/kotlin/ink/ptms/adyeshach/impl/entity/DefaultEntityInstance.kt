@@ -33,6 +33,7 @@ import taboolib.common5.Baffle
 import taboolib.common5.cbool
 import taboolib.common5.cdouble
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CopyOnWriteArraySet
 
@@ -248,6 +249,9 @@ abstract class DefaultEntityInstance(entityType: EntityTypes = EntityTypes.ZOMBI
             }
         }
 
+    /** 附着单位 */
+    val attachedEntity = ConcurrentHashMap<Int, Vector>()
+
     override fun setCustomMeta(key: String, value: String?): Boolean {
         return when (key) {
             // 实体姿态
@@ -426,6 +430,10 @@ abstract class DefaultEntityInstance(entityType: EntityTypes = EntityTypes.ZOMBI
         } else {
             clientPosition = newPosition
         }
+        // 同步 passengers 位置
+        getPassengers().forEach { it.teleport(location) }
+        // 更新 passengers 信息
+        refreshPassenger()
     }
 
     override fun setVelocity(vector: Vector) {
@@ -470,6 +478,18 @@ abstract class DefaultEntityInstance(entityType: EntityTypes = EntityTypes.ZOMBI
         } else {
             Adyeshach.api().getMinecraftAPI().getEntityOperator().updateEntityAnimation(getVisiblePlayers(), index, animation)
         }
+    }
+
+    override fun addAttachEntity(id: Int, relativePos: Vector) {
+        attachedEntity[id] = relativePos.clone()
+    }
+
+    override fun removeAttachEntity(id: Int) {
+        attachedEntity.remove(id)
+    }
+
+    override fun getAttachEntities(): Map<Int, Vector> {
+        return attachedEntity
     }
 
     override fun onTick() {

@@ -7,12 +7,15 @@ import ink.ptms.adyeshach.core.entity.StandardTags
 import ink.ptms.adyeshach.core.entity.TickService
 import ink.ptms.adyeshach.core.entity.path.PathFinderHandler
 import ink.ptms.adyeshach.core.entity.path.ResultNavigation
+import ink.ptms.adyeshach.core.entity.type.AdySilverfish
+import ink.ptms.adyeshach.core.entity.type.AdyTextDisplay
 import ink.ptms.adyeshach.core.util.encodePos
 import ink.ptms.adyeshach.core.util.ifloor
 import ink.ptms.adyeshach.core.util.plus
 import ink.ptms.adyeshach.impl.ServerTours
 import ink.ptms.adyeshach.impl.util.ChunkAccess
 import org.bukkit.util.Vector
+import taboolib.common.platform.function.info
 import taboolib.common.util.random
 import taboolib.common5.clong
 import java.util.concurrent.TimeUnit
@@ -82,6 +85,12 @@ fun DefaultEntityInstance.updateMoveFrames() {
 fun DefaultEntityInstance.handleTracker() {
     // 检查间隔
     if (viewPlayers.visibleRefreshLocker.hasNext()) {
+        // 同步到载具位置
+        val vehicle = getVehicle()
+        if (vehicle != null) {
+            position = vehicle.position.clone()
+            clientPosition = vehicle.position.clone()
+        }
         // 获取不可视的玩家
         viewPlayers.getOutsidePlayers().forEach { player ->
             // 属否在可视范围内 && 所在区块是否可见 && 显示实体
@@ -208,15 +217,6 @@ fun DefaultEntityInstance.syncPosition() {
         // 是否需要更新视角
         if (updateRotation) {
             operator.updateEntityLook(getVisiblePlayers(), index, yaw, pitch, true)
-        }
-        // 是否需要同步到载具位置
-        if (vehicleSync + TimeUnit.SECONDS.toMillis(10) < System.currentTimeMillis()) {
-            vehicleSync = System.currentTimeMillis()
-            // 获取载具
-            val vehicle = getVehicle()
-            if (vehicle != null) {
-                position = vehicle.position
-            }
         }
     } else {
         // 是否需要更新位置
