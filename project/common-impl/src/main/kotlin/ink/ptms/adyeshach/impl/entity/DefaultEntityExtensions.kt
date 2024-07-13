@@ -7,15 +7,12 @@ import ink.ptms.adyeshach.core.entity.StandardTags
 import ink.ptms.adyeshach.core.entity.TickService
 import ink.ptms.adyeshach.core.entity.path.PathFinderHandler
 import ink.ptms.adyeshach.core.entity.path.ResultNavigation
-import ink.ptms.adyeshach.core.entity.type.AdySilverfish
-import ink.ptms.adyeshach.core.entity.type.AdyTextDisplay
 import ink.ptms.adyeshach.core.util.encodePos
 import ink.ptms.adyeshach.core.util.ifloor
 import ink.ptms.adyeshach.core.util.plus
 import ink.ptms.adyeshach.impl.ServerTours
 import ink.ptms.adyeshach.impl.util.ChunkAccess
 import org.bukkit.util.Vector
-import taboolib.common.platform.function.info
 import taboolib.common.util.random
 import taboolib.common5.clong
 import java.util.concurrent.TimeUnit
@@ -170,7 +167,7 @@ fun DefaultEntityInstance.handleMove() {
             }
             // 调试模式下显示路径
             if (AdyeshachSettings.debug) {
-                world.spawnParticle(org.bukkit.Particle.SOUL_FIRE_FLAME, next.x, next.y, next.z, 2, 0.0, 0.0, 0.0, 0.0)
+                world.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, next.x, next.y, next.z, 2, 0.0, 0.0, 0.0, 0.0)
             }
         }
     }
