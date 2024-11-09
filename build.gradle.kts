@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    id("io.izzel.taboolib") version "2.0.11"
+    id("io.izzel.taboolib") version "2.0.19"
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
 }
 
@@ -14,9 +14,12 @@ subprojects {
 
     taboolib {
         env {
-            install(UNIVERSAL, DATABASE, EFFECT, NMS_UTIL, KETHER, UI, NAVIGATION, METRICS, BUKKIT_ALL)
+            install(Basic, Database, Kether, Metrics, XSeries, CommandHelper)
+            install(Bukkit, BukkitUI, BukkitNavigation, BukkitUtil, BukkitHook)
+            install(BukkitNMSUtil)
+            install(MinecraftEffect, MinecraftChat)
         }
-        version { taboolib = "6.1.2-beta10" }
+        version { taboolib = "6.2.0-beta33" }
     }
     repositories {
         maven { url = uri("https://repo.spongepowered.org/maven") }
