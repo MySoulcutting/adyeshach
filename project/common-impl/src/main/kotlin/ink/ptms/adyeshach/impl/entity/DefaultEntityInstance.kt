@@ -175,6 +175,9 @@ abstract class DefaultEntityInstance(entityType: EntityTypes = EntityTypes.ZOMBI
             }
         }
 
+    /** ModelEngine 配置 */
+    var modelEngineOptions: ModelEngineOptions? = null
+
     /** 骑乘者 */
     @Expose
     var passengers = CopyOnWriteArraySet<String>()
@@ -328,12 +331,13 @@ abstract class DefaultEntityInstance(entityType: EntityTypes = EntityTypes.ZOMBI
             if (DefaultAdyeshachAPI.localEventBus.callSpawn(this, viewer)) {
                 spawn.run()
             }
+            DefaultAdyeshachAPI.localEventBus.postSpawn(this, viewer)
             // 更新单位属性
             updateEntityMetadata(viewer)
             // 更新单位视角
             setHeadRotation(position.yaw, position.pitch, forceUpdate = true)
             // 关联实体初始化
-            submit(delay = 5) { refreshPassenger(viewer) }
+            submit(delay = 2) { refreshPassenger(viewer) }
             return true
         }
         return false
@@ -344,6 +348,7 @@ abstract class DefaultEntityInstance(entityType: EntityTypes = EntityTypes.ZOMBI
             // 使用事件系统控制实体销毁
             if (DefaultAdyeshachAPI.localEventBus.callDestroy(this, viewer)) {
                 destroy.run()
+                DefaultAdyeshachAPI.localEventBus.postDestroy(this, viewer)
             }
             return true
         }
@@ -381,8 +386,8 @@ abstract class DefaultEntityInstance(entityType: EntityTypes = EntityTypes.ZOMBI
             if (manager != null) {
                 isRemoved = true
                 manager!!.remove(this)
-                manager = null
                 AdyeshachEntityRemoveEvent(this).call()
+                manager = null
             }
         }
     }
